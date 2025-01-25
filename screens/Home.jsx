@@ -2,12 +2,13 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "./components/Header";
+import colors from "../colors"; // Import colors
 
 export default function Home() {
     return (
         <View style={styles.container}>
             <Header title="E-commerce App" />
-            <LinearGradient colors={["#66a3e0", "#cce6ff"]} style={styles.home}>
+            <LinearGradient colors={[colors.primary, colors.secondary]} style={styles.home}>
                 <View style={styles.innerContainer}>
                     <Text style={styles.text}>Item 1</Text>
                 </View>
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     },
     innerContainer: {
         borderWidth: 2,
-        borderColor: "#1144aa",
+        borderColor: colors.highlight, // Use dynamic highlight color
         padding: 36,
     },
 });

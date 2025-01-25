@@ -1,40 +1,38 @@
-import {
-    StyleSheet,
-    Text,
-    View,
-    FlatList,
-    Image,
-    ActivityIndicator,
-    TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { fetchProducts } from "../contentful";
+import { useNavigation } from "@react-navigation/native";
+import colors from "../colors";
+import Loader from "../components/Loader";
 
 export default function Store() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const getProducts = async () => {
+    const getProducts = async () => {
+        try {
             const productsData = await fetchProducts();
             setProducts(productsData);
             setLoading(false);
-        };
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    };
 
+    useEffect(() => {
         getProducts();
     }, []);
 
+    const navigation = useNavigation();
+
     const handleClick = (product) => {
         console.log("Product clicked:", product);
+        navigation.navigate("Product", { productId: product.sys.id });
     };
 
     if (loading) {
-        return (
-            <View style={styles.center}>
-                <ActivityIndicator size="large" color="#66ccff" />
-            </View>
-        );
+        return <Loader />;
     }
 
     return (
@@ -62,11 +60,9 @@ export default function Store() {
                                 </View>
                             )}
                             <Text style={styles.productTitle}>{name || "Unnamed Product"}</Text>
-                            {/* Product name */}
                             <Text style={styles.productPrice}>
                                 {price ? `$${price}` : "Price Unavailable"}
                             </Text>
-                            {/* Product price */}
                         </TouchableOpacity>
                     );
                 }}
@@ -82,7 +78,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     store: {
-        backgroundColor: "#ccddff",
+        backgroundColor: colors.accent, // Use dynamic color for background
     },
     center: {
         flex: 1,
@@ -92,7 +88,7 @@ const styles = StyleSheet.create({
     productContainer: {
         marginBottom: 20,
         padding: 8,
-        backgroundColor: "#ccddff",
+        backgroundColor: colors.accent, // Use dynamic color for product container
         borderRadius: 10,
     },
     productImage: {
@@ -101,12 +97,12 @@ const styles = StyleSheet.create({
         resizeMode: "cover",
         marginBottom: 10,
         borderWidth: 2,
-        borderColor: "#66ccff",
+        borderColor: colors.primary, // Use primary color for borders
     },
     productImagePlaceholder: {
         width: 200,
         height: 200,
-        backgroundColor: "#ddeeff",
+        backgroundColor: colors.placeholder, // Use placeholder color for no image
         marginBottom: 10,
     },
     productTitle: {
@@ -115,6 +111,6 @@ const styles = StyleSheet.create({
     },
     productPrice: {
         fontSize: 16,
-        color: "#555",
+        color: colors.textPrimary, // Use primary text color
     },
 });

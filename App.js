@@ -5,8 +5,21 @@ import Home from "./screens/Home";
 import Profile from "./screens/Profile";
 import { StyleSheet } from "react-native";
 import Store from "./screens/Store";
+import Product from "./screens/Product";
+import { createStackNavigator } from "@react-navigation/stack";
+import colors from "./colors";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const StoreNavigation = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Store" component={Store} />
+            <Stack.Screen name="Product" component={Product} />
+        </Stack.Navigator>
+    );
+};
 
 export default function App() {
     return (
@@ -14,8 +27,8 @@ export default function App() {
             <Tab.Navigator
                 screenOptions={{
                     headerShown: false,
-                    tabBarActiveTintColor: "#1144aa",
-                    tabBarInactiveTintColor: "#444",
+                    tabBarActiveTintColor: colors.highlight,
+                    tabBarInactiveTintColor: colors.textPrimary,
                     tabBarStyle: styles.nav,
                 }}
             >
@@ -26,17 +39,17 @@ export default function App() {
                         tabBarIcon: ({ color, size }) => (
                             <MaterialIcons name="home" color={color} size={size} />
                         ),
-                        tabBarLabelStyle: styles.navBtn,
+                        tabBarLabelStyle: styles.highlightSecondary,
                     }}
                 />
                 <Tab.Screen
                     name="Store"
-                    component={Store}
+                    component={StoreNavigation}
                     options={{
                         tabBarIcon: ({ color, size }) => (
                             <MaterialIcons name="store" color={color} size={size} />
                         ),
-                        tabBarLabelStyle: styles.navBtn,
+                        tabBarLabelStyle: styles.highlightSecondary,
                     }}
                 />
                 <Tab.Screen
@@ -46,7 +59,7 @@ export default function App() {
                         tabBarIcon: ({ color, size }) => (
                             <MaterialIcons name="person" color={color} size={size} />
                         ),
-                        tabBarLabelStyle: styles.navBtn,
+                        tabBarLabelStyle: styles.highlightSecondary,
                     }}
                 />
             </Tab.Navigator>
@@ -56,9 +69,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
     nav: {
-        backgroundColor: "#dbeeff",
+        backgroundColor: colors.backgroundSecndary,
         borderWidth: 1,
-        borderColor: "#003366",
+        borderColor: colors.highlightSecondary,
     },
     navBtn: {
         fontSize: 12,
