@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 const StoreNavigation = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Store" component={Store} />
+            <Stack.Screen name="StoreScreen" component={Store} />
             <Stack.Screen name="Product" component={Product} />
         </Stack.Navigator>
     );
@@ -27,8 +27,8 @@ export default function App() {
             <Tab.Navigator
                 screenOptions={{
                     headerShown: false,
-                    tabBarActiveTintColor: colors.highlight,
-                    tabBarInactiveTintColor: colors.textPrimary,
+                    tabBarActiveTintColor: colors.highlightSecondary,
+                    tabBarInactiveTintColor: colors.highlight,
                     tabBarStyle: styles.nav,
                 }}
             >
@@ -69,7 +69,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
     nav: {
-        backgroundColor: colors.backgroundSecndary,
+        backgroundColor: colors.background,
         borderWidth: 1,
         borderColor: colors.highlightSecondary,
     },

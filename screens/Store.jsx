@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import { fetchProducts } from "../contentful";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../colors";
 import Loader from "../components/Loader";
+import ProductCard from "../components/ProductCard";
 
 export default function Store() {
     const [products, setProducts] = useState([]);
@@ -42,30 +43,14 @@ export default function Store() {
                 data={products}
                 style={styles.store}
                 keyExtractor={(item) => item.sys.id}
-                renderItem={({ item }) => {
-                    console.log("Rendering product:", item);
-                    const { name, price, featuredProductImage } = item.fields;
-                    const imageUrl = featuredProductImage?.fields?.file?.url;
-
-                    return (
-                        <TouchableOpacity
-                            style={styles.productContainer}
-                            onPress={() => handleClick(item)}
-                        >
-                            {imageUrl ? (
-                                <Image source={{ uri: imageUrl }} style={styles.productImage} />
-                            ) : (
-                                <View style={styles.productImagePlaceholder}>
-                                    <Text style={styles.center}>No Image Available</Text>
-                                </View>
-                            )}
-                            <Text style={styles.productTitle}>{name || "Unnamed Product"}</Text>
-                            <Text style={styles.productPrice}>
-                                {price ? `$${price}` : "Price Unavailable"}
-                            </Text>
-                        </TouchableOpacity>
-                    );
-                }}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={styles.productContainer}
+                        onPress={() => handleClick(item)}
+                    >
+                        <ProductCard product={item} style={styles.imageContainer} />
+                    </TouchableOpacity>
+                )}
                 numColumns={2}
             />
         </View>
@@ -75,42 +60,22 @@ export default function Store() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: "flex-start",
+        backgroundColor: colors.secondary,
     },
     store: {
-        backgroundColor: colors.accent, // Use dynamic color for background
-    },
-    center: {
+        // padding: 10,
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
     },
     productContainer: {
-        marginBottom: 20,
+        flex: 1,
+        // marginBottom: 20,
+        // marginHorizontal: 5,
         padding: 8,
-        backgroundColor: colors.accent, // Use dynamic color for product container
-        borderRadius: 10,
+        backgroundColor: colors.secondary,
+        // borderRadius: 10,
     },
-    productImage: {
-        width: 200,
-        height: 200,
-        resizeMode: "cover",
-        marginBottom: 10,
-        borderWidth: 2,
-        borderColor: colors.primary, // Use primary color for borders
-    },
-    productImagePlaceholder: {
-        width: 200,
-        height: 200,
-        backgroundColor: colors.placeholder, // Use placeholder color for no image
-        marginBottom: 10,
-    },
-    productTitle: {
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    productPrice: {
-        fontSize: 16,
-        color: colors.textPrimary, // Use primary text color
+    imageContainer: {
+        height: 250,
     },
 });

@@ -14,9 +14,9 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 28,
         fontWeight: 700,
-        backgroundColor: colors.primary, // Use dynamic primary color for header background
+        backgroundColor: colors.primary,
         padding: 40,
-        textAlign: "center",
-        color: colors.textSecondary, // Use dynamic text color for header text
+        textAlign: "left",
+        color: colors.textSecondary,
     },
 });

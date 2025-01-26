@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import Header from "./components/Header";
+import Header from "../components/Header";
 import colors from "../colors"; // Import colors
 
 export default function Home() {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     },
     innerContainer: {
         borderWidth: 2,
-        borderColor: colors.highlight, // Use dynamic highlight color
+        borderColor: colors.highlight,
         padding: 36,
     },
 });

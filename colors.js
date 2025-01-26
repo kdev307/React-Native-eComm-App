@@ -1,12 +1,14 @@
-// colors.js
 export default {
-    primary: "#66a3e0",
-    secondary: "#cce6ff",
-    accent: "#ccddff",
-    highlight: "#1144aa",
-    textPrimary: "#333",
-    textSecondary: "#ffffff",
-    background: "#ddeeff",
-    highlightSecondary: "#003366",
-    backgroundSecndary: "#dbeeff",
+    primary: "#b2e7ff",
+    secondary: "#ffffff",
+    accent: "#e8f8ff",
+    background: "#d1f1ff",
+    backgroundSecondary: "#FFFFFF", // Pure white background for product cards, sections
+    textPrimary: "#0D47A1",
+    textSecondary: "#333333", // Soft gray for secondary text (reviews, descriptions)
+    textLight: "#ffffff",
+    borderPrimary: "#0D47A1",
+    highlight: "#64B5F6", // Lighter blue for special offers, notifications
+    highlightSecondary: "#0D47A1",
+    error: "#D32F2F",
 };

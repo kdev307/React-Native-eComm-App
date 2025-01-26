@@ -1,14 +1,20 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { fetchProductDetails } from "../contentful";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
 import colors from "../colors";
+import ProductImage from "../components/ProductImage";
+import ProductName from "../components/ProductName";
+import ProductPrice from "../components/ProductPrice";
+import ProductDescription from "../components/ProductDescription";
+import Buttons from "../components/Buttons";
 
 export default function Product({ route }) {
     const { productId } = route.params;
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [addToCart, setAddToCart] = useState(false);
 
     const getProductDetails = async () => {
         try {
@@ -25,7 +31,7 @@ export default function Product({ route }) {
 
     useEffect(() => {
         getProductDetails();
-        console.log("Product received:", product);
+        // console.log("Product received:", product);
     }, [productId]);
 
     if (loading) {
@@ -40,15 +46,20 @@ export default function Product({ route }) {
 
     const imageUrl = featuredProductImage?.fields?.file?.url;
 
+    const handleAddToCart = () => {
+        setAddToCart((prev) => !prev);
+    };
+
     return (
-        <View style={styles.container}>
-            {imageUrl && <Image source={{ url: imageUrl }} style={styles.productImage} />}
-            <Text style={styles.productName}>{name || "Product Name"}</Text>
-            <Text style={styles.productPrice}>
-                {product.price ? `$${price}` : "Price Unavailable"}
-            </Text>
-            <Text style={styles.productDescription}>{description || "Product Description"}</Text>
-        </View>
+        <ScrollView style={styles.container}>
+            <ProductImage imageUrl={imageUrl} style={styles.imageContainer} />
+            <ProductName name={name} style={styles.productName} />
+            <ProductPrice price={price} style={styles.productPrice} />
+            <ProductDescription description={description} style={styles.productDescription} />
+            <TouchableOpacity style={styles.buttonContainer} onPress={handleAddToCart}>
+                <Buttons buttonName={addToCart ? "Added" : "Add To Cart"} />
+            </TouchableOpacity>
+        </ScrollView>
     );
 }
 
@@ -58,29 +69,36 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: colors.background,
     },
-    center: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+    imageContainer: {
+        height: 500,
     },
     productImage: {
         width: "100%",
-        height: 300,
+        height: "100%",
         resizeMode: "cover",
-        marginBottom: 20,
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: colors.highlight,
     },
     productName: {
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 10,
+        color: colors.textPrimary,
     },
     productPrice: {
         fontSize: 20,
-        color: colors.primary,
+        color: colors.textSecondary,
+        fontWeight: "bold",
         marginBottom: 10,
     },
     productDescription: {
         fontSize: 16,
+        lineHeight: 22,
         color: colors.textPrimary,
+    },
+    buttonContainer: {
+        backgroundColor: colors.highlightSecondary,
+        marginTop: 20,
     },
 });
