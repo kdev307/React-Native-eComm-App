@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 export default function Error({ error }) {
     return (
         <View style={styles.center}>
-            <MaterialIcons name="sentiment-dissatisfied" color={colors.highlight} size={50} />
+            <MaterialIcons name="sentiment-dissatisfied" color={colors.textPrimary} size={50} />
             <Text style={styles.errorText}>{error}</Text>
         </View>
     );
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: 18,
-        color: colors.highlight,
+        color: colors.textPrimary,
         fontWeight: 700,
     },
 });

@@ -6,9 +6,10 @@ import colors from "../colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import Buttons from "../components/Buttons";
 import { CartContext } from "../context";
+import Error from "../components/Error";
 
 export default function Cart() {
-    const { cart, removeFromCart, totalPrice } = useContext(CartContext);
+    const { cart, removeFromCart, totalPrice, incQty, decQty } = useContext(CartContext);
     console.log("Current Cart:", cart);
     const handleRemove = (id) => {
         removeFromCart(id);
@@ -17,10 +18,21 @@ export default function Cart() {
         <View style={styles.container}>
             <Header title="Cart" />
             <View style={styles.cartContainer}>
+                cart.length === 0 &&{" "}
+                <View>
+                    <Error error="Your Cart is Empty, Shop Now" />
+                </View>
                 <FlatList
                     style={{ paddingBottom: 200 }}
                     data={cart}
-                    renderItem={({ item }) => <CartCard cartItem={item} onRemove={handleRemove} />}
+                    renderItem={({ item }) => (
+                        <CartCard
+                            cartItem={item}
+                            onRemove={handleRemove}
+                            onIncrease={incQty}
+                            onDecrease={decQty}
+                        />
+                    )}
                     // keyExtractor={(item) => item.sys.id}
                     keyExtractor={(item) => item.id.toString()}
                     ListFooterComponent={
@@ -36,14 +48,14 @@ export default function Cart() {
                                     <View style={styles.price}>
                                         <Text style={styles.text}>Shipping:</Text>
                                         <Text style={[styles.text, { fontWeight: 500 }]}>
-                                            ${(totalPrice * 0.01).toFixed(2)}
+                                            ${totalPrice > 500 ? 10 : 0}
                                         </Text>
                                     </View>
                                     <View style={styles.line} />
                                     <View style={styles.price}>
                                         <Text style={styles.text}>Grand Total:</Text>
                                         <Text style={[styles.text, { fontWeight: 700 }]}>
-                                            ${totalPrice * 1.01}
+                                            ${totalPrice + (totalPrice > 500 ? 10 : 0)}
                                         </Text>
                                     </View>
                                 </View>
@@ -70,7 +82,9 @@ const styles = StyleSheet.create({
         backgroundColor: colors.secondary,
     },
     cartContainer: {
-        flex: 1,
+        flex: 0.9,
+        alignItems: "center",
+        justifyContent: "center",
     },
     priceContainer: {
         padding: 30,

@@ -3,13 +3,13 @@ import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import colors from "../colors";
 
-export default function CartCard({ cartItem, onRemove }) {
+export default function CartCard({ cartItem, onRemove, onIncrease, onDecrease }) {
     // if (!cartItem || !cartItem.sys) {
     //     console.error("Invalid cart item data:", cartItem);
     //     return null;
     // }
     console.log("cart item: ", cartItem);
-    const { featuredProductImage, name, price } = cartItem;
+    const { featuredProductImage, name, price, qty } = cartItem;
 
     const imageUrl = featuredProductImage?.fields?.file?.url;
     return (
@@ -18,6 +18,15 @@ export default function CartCard({ cartItem, onRemove }) {
             <View style={styles.cardData}>
                 <Text style={styles.cardName}>{name}</Text>
                 <Text style={styles.cardPrice}>$ {price}</Text>
+                <View style={styles.quantityContainer}>
+                    <TouchableOpacity onPress={() => onDecrease(cartItem.id)}>
+                        <MaterialIcons name="remove" size={24} color={colors.highlightSecondary} />
+                    </TouchableOpacity>
+                    <Text style={styles.quantityText}>{qty}</Text>
+                    <TouchableOpacity onPress={() => onIncrease(cartItem.id)}>
+                        <MaterialIcons name="add" size={24} color={colors.highlightSecondary} />
+                    </TouchableOpacity>
+                </View>
             </View>
             <TouchableOpacity
                 onPress={() => {
@@ -63,5 +72,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 500,
         color: colors.textSecondary,
+    },
+    quantityContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+    },
+    quantityText: {
+        fontSize: 18,
+        color: colors.textPrimary,
     },
 });

@@ -15,25 +15,25 @@ import { CartContext } from "../context";
 
 export default function Product({ route }) {
     const { productId } = route.params;
-    const { addToCart } = useContext(CartContext);
+    const { addToCart, cart } = useContext(CartContext);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isAdded, setIsAdded] = useState(false);
 
-    useEffect(() => {
-        const getProductDetails = async () => {
-            try {
-                const productData = await fetchProductDetails(productId);
-                console.log("API Response:", productData);
-                setProduct(productData);
-                setLoading(false);
-                console.log("Product received:", product);
-            } catch (error) {
-                console.error("Error fetching product details:", error);
-                setLoading(false);
-            }
-        };
+    const getProductDetails = async () => {
+        try {
+            const productData = await fetchProductDetails(productId);
+            console.log("API Response:", productData);
+            setProduct(productData);
+            setLoading(false);
+            console.log("Product received:", product);
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         getProductDetails();
         // console.log("Product received:", product);
     }, [productId]);
@@ -84,6 +84,7 @@ export default function Product({ route }) {
             <TouchableOpacity
                 style={styles.buttonContainer}
                 onPress={() => handleAddToCart({ ...product, id: productId })}
+                disabled={isAdded}
             >
                 <Buttons buttonName={isAdded ? "Added" : "Add To Cart"} />
                 {isAdded ? (
