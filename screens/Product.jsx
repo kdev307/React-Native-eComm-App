@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { fetchProductDetails } from "../contentful";
 import Error from "../components/Error";
 import Loader from "../components/Loader";
@@ -9,27 +9,31 @@ import ProductName from "../components/ProductName";
 import ProductPrice from "../components/ProductPrice";
 import ProductDescription from "../components/ProductDescription";
 import Buttons from "../components/Buttons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { CartContext } from "../context";
 
 export default function Product({ route }) {
     const { productId } = route.params;
+    const { addToCart } = useContext(CartContext);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [addToCart, setAddToCart] = useState(false);
-
-    const getProductDetails = async () => {
-        try {
-            const productData = await fetchProductDetails(productId);
-            console.log("API Response:", productData);
-            setProduct(productData);
-            setLoading(false);
-            console.log("Product received:", product);
-        } catch (error) {
-            console.error("Error fetching product details:", error);
-            setLoading(false);
-        }
-    };
+    const [isAdded, setIsAdded] = useState(false);
 
     useEffect(() => {
+        const getProductDetails = async () => {
+            try {
+                const productData = await fetchProductDetails(productId);
+                console.log("API Response:", productData);
+                setProduct(productData);
+                setLoading(false);
+                console.log("Product received:", product);
+            } catch (error) {
+                console.error("Error fetching product details:", error);
+                setLoading(false);
+            }
+        };
+
         getProductDetails();
         // console.log("Product received:", product);
     }, [productId]);
@@ -46,18 +50,47 @@ export default function Product({ route }) {
 
     const imageUrl = featuredProductImage?.fields?.file?.url;
 
-    const handleAddToCart = () => {
-        setAddToCart((prev) => !prev);
+    const handleAddToCart = (item) => {
+        // if (isAdded === true) {
+        //     setIsAdded(false);
+        //     // addToCart(item);
+        // } else {
+        console.log("Item Added: ", item);
+        addToCart(item);
+        setIsAdded(true);
+        // }
+    };
+
+    const navigation = useNavigation();
+    const handleBack = () => {
+        // navigation.navigate("StoreScreen");
+        navigation.goBack();
     };
 
     return (
         <ScrollView style={styles.container}>
+            <TouchableOpacity onPress={handleBack}>
+                <MaterialIcons
+                    name="chevron-left"
+                    color={colors.highlightSecondary}
+                    size={40}
+                    style={styles.back}
+                />
+            </TouchableOpacity>
             <ProductImage imageUrl={imageUrl} style={styles.imageContainer} />
             <ProductName name={name} style={styles.productName} />
             <ProductPrice price={price} style={styles.productPrice} />
             <ProductDescription description={description} style={styles.productDescription} />
-            <TouchableOpacity style={styles.buttonContainer} onPress={handleAddToCart}>
-                <Buttons buttonName={addToCart ? "Added" : "Add To Cart"} />
+            <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={() => handleAddToCart({ ...product, id: productId })}
+            >
+                <Buttons buttonName={isAdded ? "Added" : "Add To Cart"} />
+                {isAdded ? (
+                    <MaterialIcons name="check" color={colors.textLight} size={24} />
+                ) : (
+                    <MaterialIcons name="add-shopping-cart" color={colors.textLight} size={24} />
+                )}
             </TouchableOpacity>
         </ScrollView>
     );
@@ -65,9 +98,13 @@ export default function Product({ route }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 0.8,
         padding: 20,
         backgroundColor: colors.background,
+    },
+    back: {
+        marginVertical: 20,
+        marginHorizontal: 0,
     },
     imageContainer: {
         height: 500,
@@ -100,5 +137,9 @@ const styles = StyleSheet.create({
     buttonContainer: {
         backgroundColor: colors.highlightSecondary,
         marginTop: 20,
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });

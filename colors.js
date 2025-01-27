@@ -3,7 +3,6 @@ export default {
     secondary: "#ffffff",
     accent: "#e8f8ff",
     background: "#d1f1ff",
-    backgroundSecondary: "#FFFFFF", // Pure white background for product cards, sections
     textPrimary: "#0D47A1",
     textSecondary: "#333333", // Soft gray for secondary text (reviews, descriptions)
     textLight: "#ffffff",

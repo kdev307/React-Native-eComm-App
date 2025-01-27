@@ -14,9 +14,11 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 28,
         fontWeight: 700,
-        backgroundColor: colors.primary,
-        padding: 40,
+        // backgroundColor: colors.primary,
+        paddingHorizontal: 30,
+        paddingVertical: 20,
         textAlign: "left",
         color: colors.textSecondary,
+        marginTop: 40,
     },
 });

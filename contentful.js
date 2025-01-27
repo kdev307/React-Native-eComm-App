@@ -2,8 +2,8 @@
 import { createClient } from "contentful";
 import { EXPO_SPACE_ID, EXPO_ACCESS_TOKEN } from "react-native-dotenv";
 
-// const SPACE_ID = EXPO_SPACE_ID;
-// const ACCESS_TOKEN = EXPO_ACCESS_TOKEN;
+const SPACE_ID = EXPO_SPACE_ID;
+const ACCESS_TOKEN = EXPO_ACCESS_TOKEN;
 
 const client = createClient({
     space: SPACE_ID,
@@ -30,7 +30,20 @@ export const fetchProductDetails = async (productId) => {
         console.log("Fetched product:", response);
         return response.fields;
     } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching product details:", error);
         return error;
+    }
+};
+
+export const fetchLandingPage = async () => {
+    try {
+        const response = await client.getEntries({
+            content_type: "pageLanding",
+        });
+        console.log("Landing Page: ", response);
+        return response.items;
+    } catch (error) {
+        console.error("Error fetching images:", error);
+        return [];
     }
 };

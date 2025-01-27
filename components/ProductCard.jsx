@@ -4,6 +4,7 @@ import ProductImage from "./ProductImage";
 import ProductName from "./ProductName";
 import ProductPrice from "./ProductPrice";
 import colors from "../colors";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export default function ProductCard({ product, style }) {
     const { name, price, featuredProductImage } = product.fields;
@@ -11,9 +12,16 @@ export default function ProductCard({ product, style }) {
     return (
         <View style={styles.cardContainer}>
             <ProductImage imageUrl={imageUrl} style={[styles.imageContainer, style]} />
-            <View style={styles.productInfo}>
-                <ProductName name={name} />
-                <ProductPrice price={price} />
+            <View style={styles.productInfoContainer}>
+                <View style={styles.productInfo}>
+                    <ProductName name={name} />
+                    <ProductPrice price={price} />
+                </View>
+                {/* <MaterialIcons
+                    name="favorite-outline"
+                    color={colors.highlightSecondary}
+                    size={30}
+                /> */}
             </View>
         </View>
     );
@@ -27,9 +35,15 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: colors.primary,
     },
-    productInfo: {
+    productInfoContainer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: colors.secondary,
-        padding: 10,
+        padding: 8,
+    },
+    productInfo: {
         maxHeight: 90,
         minHeight: 90,
         flex: 1,
